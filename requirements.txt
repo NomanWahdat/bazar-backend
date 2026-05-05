@@ -7,3 +7,5 @@ pyotp
 qrcode
 django-admin-interface>=0.24.0
 django-colorfield>=0.8.0
+gunicorn
+python-dotenv
