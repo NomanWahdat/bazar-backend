@@ -14,6 +14,7 @@ import json
 import logging
 import secrets
 import re
+import os
 from datetime import timedelta
 from typing import Any
 from django.contrib.auth.hashers import check_password
@@ -841,7 +842,7 @@ class SendEmailVerificationView(APIView):
             )
 
         token = user.generate_email_verification_token()
-        frontend_url = request.data.get("frontend_url", "http://localhost:5173")
+        frontend_url = request.data.get("frontend_url", None) or os.getenv('FRONTEND_URL', 'http://localhost:5173')
 
         sent = send_email_verification_email(user, token, frontend_url=frontend_url)
         if not sent:

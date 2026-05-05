@@ -2,6 +2,7 @@
 serializers.py - Professional E-commerce API Serializers
 """
 import json
+import os
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
@@ -1035,7 +1036,7 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True)
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES, default='customer')
-    frontend_url = serializers.CharField(required=False, default='http://localhost:5173')
+    frontend_url = serializers.CharField(required=False, default=None)
 
     def validate(self, data):
         # Check password match
@@ -1064,7 +1065,7 @@ class RegisterSerializer(serializers.Serializer):
         validated_data.pop('password_confirm')
         
         # Extract frontend_url before creating user (not a User field)
-        frontend_url = validated_data.pop('frontend_url', 'http://localhost:5173')
+        frontend_url = validated_data.pop('frontend_url', None) or os.getenv('FRONTEND_URL', 'http://localhost:5173')
         
         # Normalize phone before creating user
         phone = validated_data.get('phone', '')

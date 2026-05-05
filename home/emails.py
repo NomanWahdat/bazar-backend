@@ -3,6 +3,7 @@
 from django.core.mail import send_mail
 from django.conf import settings
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -121,10 +122,13 @@ The BazaarAF Team
         return False
 
 
-def send_email_verification_email(user, verification_token, frontend_url="http://localhost:5173"):
+def send_email_verification_email(user, verification_token, frontend_url=None):
     """
     Send email verification link to user after signup
     """
+    if frontend_url is None:
+        frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+    
     subject = 'Verify your BazaarAF Email Address ✉️'
     verification_url = f"{frontend_url}/verify-email?token={verification_token}"
     
@@ -171,10 +175,13 @@ The BazaarAF Team
         return True  # Don't block signup due to email errors
 
 
-def send_password_reset_email(user, reset_token, frontend_url="http://localhost:5173"):
+def send_password_reset_email(user, reset_token, frontend_url=None):
     """
     Send password reset link to user
     """
+    if frontend_url is None:
+        frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+    
     subject = 'Reset Your BazaarAF Password 🔐'
     reset_url = f"{frontend_url}/reset-password?token={reset_token}"
     

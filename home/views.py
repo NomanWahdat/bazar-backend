@@ -12,6 +12,7 @@ from django.utils import timezone
 import logging
 import uuid
 import secrets
+import os
 
 from rest_framework import viewsets, status, permissions, filters
 from rest_framework.views import APIView
@@ -475,7 +476,7 @@ class RequestPasswordResetView(APIView):
             
             # Send email with reset link
             from .emails import send_password_reset_email
-            frontend_url = request.data.get('frontend_url', 'https://bazaaraf.com')
+            frontend_url = request.data.get('frontend_url', None) or os.getenv('FRONTEND_URL', 'https://bazaaraf.com')
             send_password_reset_email(user, reset_token, frontend_url)
             
             return Response({

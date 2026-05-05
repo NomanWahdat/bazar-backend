@@ -55,7 +55,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default
     "http://localhost:5174",  # Vite when 5173 is taken
     "http://localhost:3000",  # React default
+    "https://bazar-frontend-pl1r.vercel.app",  # Production frontend
+    os.getenv('FRONTEND_URL', ''),  # Allow frontend URL from environment
 ]
+
+# Remove empty strings from CORS_ALLOWED_ORIGINS
+CORS_ALLOWED_ORIGINS = [url for url in CORS_ALLOWED_ORIGINS if url]
+
 CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
